@@ -16,8 +16,21 @@ Welcome! This is a creative, professional chatbot interface powered by Langchain
 - Ask anything about the website
 - Get instant, AI-powered answers
 ---
-**Made with ❤️ using Streamlit**
+**Made with Streamlit**
 """)
+
+# --- New Chat Section ---
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 💬 Chat Management")
+
+if st.sidebar.button("🆕 New Chat", use_container_width=True, key="new_chat_btn"):
+    # Clear all messages and start fresh
+    st.session_state['messages'] = [
+        {"role": "bot", "content": "Welcome to your AI Website Chatbot! I'm here to help you with any questions. Try asking me about websites, development or anything else!"}
+    ]
+    st.rerun()
+
+st.sidebar.markdown("---")
 # --- Chat Interface ---
 if 'messages' not in st.session_state:
     st.session_state['messages'] = [
@@ -310,6 +323,47 @@ st.markdown(
     .stSidebar {
         background: linear-gradient(135deg, #30cfd0 0%, #a259c6 100%) !important;
         /* Lighter turquoise and purple gradient */
+    }
+    
+    /* New Chat Button Styling */
+    .stSidebar .stButton > button {
+        background: linear-gradient(90deg, #ffffff 0%, #f8f9fa 100%) !important;
+        color: #1a1a2e !important;
+        border: 2px solid rgba(255,255,255,0.3) !important;
+        border-radius: 15px !important;
+        font-weight: bold !important;
+        font-size: 1.1rem !important;
+        padding: 12px 20px !important;
+        margin: 8px 0 !important;
+        font-family: 'Outfit', sans-serif !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+        min-height: 50px !important;
+    }
+    
+    .stSidebar .stButton > button:hover {
+        background: linear-gradient(90deg, #30cfd0 0%, #a259c6 100%) !important;
+        color: white !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(162,89,198,0.3) !important;
+        border-color: rgba(255,255,255,0.6) !important;
+    }
+    
+    .stSidebar .stButton > button:active {
+        transform: translateY(0px) !important;
+        box-shadow: 0 3px 10px rgba(162,89,198,0.2) !important;
+    }
+    
+    /* Sidebar text styling */
+    .stSidebar .markdown-text-container {
+        color: white !important;
+    }
+    
+    .stSidebar h3 {
+        color: white !important;
+        font-family: 'Outfit', sans-serif !important;
+        font-weight: bold !important;
     }
     </style>
     """,
