@@ -1,5 +1,8 @@
 import streamlit as st
 from PIL import Image
+from openai import OpenAI
+import os
+from datetime import datetime
 
 # --- Page Config ---
 st.set_page_config(
@@ -19,22 +22,77 @@ Welcome! This is a creative, professional chatbot interface powered by Langchain
 **Made with Streamlit**
 """)
 
+# --- AI Configuration ---
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 🧠 AI Settings")
+
+# OpenAI API Key input
+api_key = st.sidebar.text_input("Enter OpenAI API Key:", type="password", key="api_key")
+if api_key:
+    client = OpenAI(api_key=api_key)
+    st.sidebar.success("✅ API Key configured!")
+else:
+    st.sidebar.warning("⚠️ Please enter your OpenAI API key to enable AI responses")
+    client = None
+
+# AI Model selection
+model_choice = st.sidebar.selectbox(
+    "Choose AI Model:",
+    ["gpt-3.5-turbo", "gpt-4", "gpt-4-turbo-preview"],
+    index=0
+)
+
+# AI Temperature (creativity) slider
+temperature = st.sidebar.slider(
+    "AI Creativity (Temperature):",
+    min_value=0.0,
+    max_value=2.0,
+    value=0.7,
+    step=0.1,
+    help="Higher values make the AI more creative but less focused"
+)
+
+# Example prompts
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 💡 Example Questions")
+st.sidebar.markdown("""
+**Try asking me about:**
+- "How do I optimize my website for SEO?"
+- "What's the best way to design a responsive layout?"
+- "Explain React hooks with examples"
+- "How to improve website loading speed?"
+- "Write a Python function to scrape websites"
+- "What are the latest web design trends?"
+""")
+
 # --- New Chat Section ---
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 💬 Chat Management")
 
 if st.sidebar.button("🆕 New Chat", use_container_width=True, key="new_chat_btn"):
     # Clear all messages and start fresh
+    welcome_msg = "Welcome to your AI Website Chatbot! 🤖✨"
+    if api_key:
+        welcome_msg += " I'm powered by OpenAI and ready to help you with any questions about websites, development, or anything else!"
+    else:
+        welcome_msg += " Please add your OpenAI API key in the sidebar to unlock my full AI capabilities!"
+    
     st.session_state['messages'] = [
-        {"role": "bot", "content": "Welcome to your AI Website Chatbot! I'm here to help you with any questions. Try asking me about websites, development or anything else!"}
+        {"role": "bot", "content": welcome_msg}
     ]
     st.rerun()
 
 st.sidebar.markdown("---")
 # --- Chat Interface ---
 if 'messages' not in st.session_state:
+    welcome_msg = "Welcome to your AI Website Chatbot! 🤖✨ I'm here to help you with any questions about websites, development, or anything else!"
+    if 'api_key' in st.session_state and st.session_state.api_key:
+        welcome_msg += " I'm powered by OpenAI and ready to provide intelligent responses!"
+    else:
+        welcome_msg += " Please add your OpenAI API key in the sidebar to unlock my full AI capabilities!"
+    
     st.session_state['messages'] = [
-        {"role": "bot", "content": "Welcome to your AI Website Chatbot! I'm here to help you with any questions. Try asking me about websites, development or anything else!"}
+        {"role": "bot", "content": welcome_msg}
     ]
 
 # --- Header ---
@@ -83,22 +141,59 @@ with st.form(key="chat_form", clear_on_submit=True):
 if submit and user_input.strip():
     st.session_state['messages'].append({"role": "user", "content": user_input})
     
-    # Simple AI responses (you can replace this with OpenAI/Langchain later)
-    user_message = user_input.lower()
-    if "hello" in user_message or "hi" in user_message:
-        bot_response = "Hello! 👋 I'm your AI website assistant. How can I help you today?"
-    elif "how are you" in user_message:
-        bot_response = "I'm doing great! Thanks for asking. I'm here to help you with any questions about websites or anything else you'd like to know!"
-    elif "website" in user_message:
-        bot_response = "I can help you with website-related questions! Whether it's about web development, design, SEO, or functionality - just ask!"
-    elif "help" in user_message:
-        bot_response = "I'm here to help! You can ask me about:\n• Website development\n• Design tips\n• Technical questions\n• General information\n\nWhat would you like to know?"
-    elif "thank" in user_message:
-        bot_response = "You're very welcome! 😊 Is there anything else I can help you with?"
-    elif "bye" in user_message or "goodbye" in user_message:
-        bot_response = "Goodbye! 👋 Feel free to come back anytime if you have more questions!"
+    # AI-powered responses using OpenAI
+    if api_key and client:
+        try:
+            # Prepare conversation history for OpenAI
+            messages_for_ai = [
+                {"role": "system", "content": """You are a helpful AI assistant for a website chatbot. You are knowledgeable, friendly, and professional. 
+                You can help with:
+                - Website development questions
+                - General programming and coding help
+                - Design and UX advice
+                - SEO and web optimization
+                - Technical troubleshooting
+                - General questions about any topic
+                
+                Always be helpful, concise, and provide practical advice when possible. Use emojis sparingly but appropriately to make responses engaging."""}
+            ]
+            
+            # Add recent conversation history (last 10 messages to avoid token limits)
+            recent_messages = st.session_state['messages'][-10:]
+            for msg in recent_messages:
+                if msg['role'] == 'user':
+                    messages_for_ai.append({"role": "user", "content": msg['content']})
+                else:
+                    messages_for_ai.append({"role": "assistant", "content": msg['content']})
+            
+            # Add the current user message
+            messages_for_ai.append({"role": "user", "content": user_input})
+            
+            # Get AI response
+            with st.spinner("🤖 AI is thinking..."):
+                response = client.chat.completions.create(
+                    model=model_choice,
+                    messages=messages_for_ai,
+                    temperature=temperature,
+                    max_tokens=1000
+                )
+                
+                bot_response = response.choices[0].message.content
+            
+        except Exception as e:
+            bot_response = f"❌ Sorry, I encountered an error: {str(e)}. Please check your API key and try again."
+    
     else:
-        bot_response = f"That's an interesting question about '{user_input}'! I'm currently a demo chatbot, but I'm learning to provide better responses. Soon I'll be powered by advanced AI to give you more detailed answers!"
+        # Fallback responses when no API key is provided
+        user_message = user_input.lower()
+        if "hello" in user_message or "hi" in user_message:
+            bot_response = "Hello! 👋 I'm your AI website assistant. Please add your OpenAI API key in the sidebar to enable full AI capabilities!"
+        elif "api" in user_message or "key" in user_message:
+            bot_response = "🔑 To enable AI responses, please enter your OpenAI API key in the sidebar. You can get one from https://platform.openai.com/api-keys"
+        elif "help" in user_message:
+            bot_response = "I can help you with:\n• Website development\n• Programming questions\n• Design advice\n• SEO optimization\n• And much more!\n\n🔑 Add your OpenAI API key to unlock full AI capabilities!"
+        else:
+            bot_response = f"I'd love to help you with '{user_input}'! 🤖 Please add your OpenAI API key in the sidebar to enable intelligent AI responses."
     
     st.session_state['messages'].append({"role": "bot", "content": bot_response})
     st.rerun()
