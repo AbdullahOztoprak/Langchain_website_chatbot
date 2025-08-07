@@ -32,35 +32,43 @@ st.markdown(
 )
 # --- Chat Interface ---
 if 'messages' not in st.session_state:
-    st.session_state['messages'] = []
-chat_container = st.container()
-with chat_container:
-    for msg in st.session_state['messages']:
-        if msg['role'] == 'user':
-            st.markdown(f"<div class='user-bubble'><b>🧑 You:</b> {msg['content']}</div>", unsafe_allow_html=True)
-        else:
-            st.markdown(f"<div class='bot-bubble'><b>🤖 Bot:</b> {msg['content']}</div>", unsafe_allow_html=True)
+    st.session_state['messages'] = [
+        {"role": "bot", "content": "Hello! 👋 Welcome to your AI Website Chatbot! I'm here to help you with any questions. Try asking me about websites, development, or anything else!"}
+    ]
+
+for msg in st.session_state['messages']:
+    if msg['role'] == 'user':
+        st.markdown(f"<div class='user-bubble'><b>🧑 You:</b> {msg['content']}</div>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<div class='bot-bubble'><b>🤖 Bot:</b> {msg['content']}</div>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
 
 with st.form(key="chat_form", clear_on_submit=True):
-
-    st.markdown(
-        """
-        <div class="custom-input-container">
-            <input id="custom-input" name="input" type="text" placeholder="Type your message..." maxlength="200" autocomplete="off" />
-            <button type="submit" class="custom-send-btn">Send</button>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    user_input = st.text_input("", placeholder="Type your message...", key="user_message", label_visibility="collapsed")
     submit = st.form_submit_button("Send", use_container_width=True)
-    user_input = st.session_state.get('input', '')
 
 if submit and user_input.strip():
     st.session_state['messages'].append({"role": "user", "content": user_input})
-    # Placeholder for bot response (to be replaced with Langchain/OpenAI integration)
-    bot_response = "I'm an AI bot. (Langchain/OpenAI integration coming soon!)"
+    
+    # Simple AI responses (you can replace this with OpenAI/Langchain later)
+    user_message = user_input.lower()
+    if "hello" in user_message or "hi" in user_message:
+        bot_response = "Hello! 👋 I'm your AI website assistant. How can I help you today?"
+    elif "how are you" in user_message:
+        bot_response = "I'm doing great! Thanks for asking. I'm here to help you with any questions about websites or anything else you'd like to know!"
+    elif "website" in user_message:
+        bot_response = "I can help you with website-related questions! Whether it's about web development, design, SEO, or functionality - just ask!"
+    elif "help" in user_message:
+        bot_response = "I'm here to help! You can ask me about:\n• Website development\n• Design tips\n• Technical questions\n• General information\n\nWhat would you like to know?"
+    elif "thank" in user_message:
+        bot_response = "You're very welcome! 😊 Is there anything else I can help you with?"
+    elif "bye" in user_message or "goodbye" in user_message:
+        bot_response = "Goodbye! 👋 Feel free to come back anytime if you have more questions!"
+    else:
+        bot_response = f"That's an interesting question about '{user_input}'! I'm currently a demo chatbot, but I'm learning to provide better responses. Soon I'll be powered by advanced AI to give you more detailed answers!"
+    
     st.session_state['messages'].append({"role": "bot", "content": bot_response})
+    st.rerun()
 
 st.markdown(
     """
@@ -87,32 +95,81 @@ st.markdown(
     .stApp {
         background: linear-gradient(135deg, #1a6fa5 0%, #5e3370 100%) fixed !important;
     }
+    /* Form container styling */
+    .stForm {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: 70px !important;
+    }
+    .stTextInput>div {
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+        padding: 0 !important;
+        min-height: 70px !important;
+        height: 70px !important;
+    }
+    .stTextInput>div>div {
+        min-height: 70px !important;
+        height: 70px !important;
+        display: flex !important;
+        align-items: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
     .stTextInput>div>div>input {
-        border-radius: 10px;
-        border: 2px solid #3d246c;
-        padding: 14px 18px;
-        font-size: 1.15rem;
+        border-radius: 20px;
+        border: 4px solid #30cfd0;
+        padding: 20px 30px;
+        font-size: 1.35rem;
         font-family: 'Outfit', sans-serif;
         background: #fff;
         color: #1a1a2e;
-        box-shadow: 0 2px 8px rgba(48,207,208,0.08);
-        margin-bottom: 0.5rem;
+        box-shadow: 0 8px 25px rgba(48,207,208,0.2);
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+        min-height: 70px;
+        height: 70px !important;
+        transition: all 0.4s ease;
+        width: 100%;
+        box-sizing: border-box;
+        line-height: 1.2;
+    }
+    .stTextInput>div>div>input:focus {
+        border-color: #a259c6;
+        box-shadow: 0 12px 35px rgba(162,89,198,0.35);
+        transform: translateY(-3px);
+        outline: none;
+    }
+    .stTextInput>div>div>input::placeholder {
+        color: #999;
+        font-size: 1.2rem;
+        font-weight: 400;
     }
     .stButton>button {
         background: linear-gradient(90deg, #a259c6 0%, #30cfd0 100%);
         color: white;
-        border-radius: 10px;
+        border-radius: 20px;
         font-weight: bold;
-        font-size: 1.1rem;
-        padding: 10px 28px;
-        margin-top: 8px;
+        font-size: 1.35rem;
+        padding: 20px 45px;
+        margin-top: 15px;
         font-family: 'Outfit', sans-serif;
         border: none;
-        box-shadow: 0 2px 8px rgba(48,207,208,0.08);
-        transition: background 0.3s;
+        box-shadow: 0 8px 25px rgba(48,207,208,0.2);
+        transition: all 0.4s ease;
+        min-height: 70px;
+        width: 100%;
     }
     .stButton>button:hover {
         background: linear-gradient(90deg, #30cfd0 0%, #a259c6 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(162,89,198,0.35);
+    }
+    .stButton>button:active {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(162,89,198,0.25);
     }
     /* Custom input container */
     .custom-input-container {
