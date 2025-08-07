@@ -18,23 +18,26 @@ Welcome! This is a creative, professional chatbot interface powered by Langchain
 ---
 **Made with ❤️ using Streamlit**
 """)
-# --- Header ---
-# --- Header ---
-st.markdown(
-    """
-    <link href='https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap' rel='stylesheet'>
-    <div style='text-align: center; padding: 1rem 0; font-family: "Outfit", sans-serif;'>
-        <h1 style='color: #1a1a2e; margin-bottom: 0; font-family: "Outfit", sans-serif;'>AI Website Chatbot</h1>
-        <p style='color: #3d246c; font-size: 1.2rem; font-family: "Outfit", sans-serif;'>Your smart assistant for any website</p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
 # --- Chat Interface ---
 if 'messages' not in st.session_state:
     st.session_state['messages'] = [
         {"role": "bot", "content": "Welcome to your AI Website Chatbot! I'm here to help you with any questions. Try asking me about websites, development or anything else!"}
     ]
+
+# --- Header ---
+# Only show header if there are no user messages yet
+user_messages = [msg for msg in st.session_state['messages'] if msg['role'] == 'user']
+if len(user_messages) == 0:
+    st.markdown(
+        """
+        <link href='https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap' rel='stylesheet'>
+        <div class="header-container" style='text-align: center; padding: 1rem 0; font-family: "Outfit", sans-serif; transition: all 0.5s ease-in-out; opacity: 1; transform: translateY(0);'>
+            <h1 style='color: #1a1a2e; margin-bottom: 0; font-family: "Outfit", sans-serif; transition: all 0.3s ease;'>AI Website Chatbot</h1>
+            <p style='color: #3d246c; font-size: 1.2rem; font-family: "Outfit", sans-serif; transition: all 0.3s ease;'>Your smart assistant for any website</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 for msg in st.session_state['messages']:
     if msg['role'] == 'user':
@@ -129,6 +132,12 @@ st.markdown(
         margin: 20px 0;
         box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         border: 2px solid rgba(48,207,208,0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .input-container-wrapper:hover {
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
     }
     
     .input-container-inner {
@@ -137,6 +146,23 @@ st.markdown(
         padding: 15px;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+    }
+    
+    /* Header smooth transitions */
+    .header-container {
+        animation: fadeInDown 0.6s ease-out;
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
     .stTextInput>div {
         margin-bottom: 0 !important;
@@ -154,14 +180,14 @@ st.markdown(
         padding: 0 !important;
     }
     .stTextInput>div>div>input {
-        border-radius: 20px;
-        border: 4px solid #30cfd0;
+        border-radius: 15px;
+        border: 3px solid rgba(255,255,255,0.4);
         padding: 20px 30px;
         font-size: 1.35rem;
         font-family: 'Outfit', sans-serif;
-        background: #fff;
+        background: #ffffff !important;
         color: #1a1a2e;
-        box-shadow: 0 8px 25px rgba(48,207,208,0.2);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         margin-bottom: 0 !important;
         margin-top: 0 !important;
         min-height: 70px;
@@ -170,17 +196,34 @@ st.markdown(
         width: 100%;
         box-sizing: border-box;
         line-height: 1.2;
+        caret-color: #a259c6;
     }
     .stTextInput>div>div>input:focus {
-        border-color: #a259c6;
-        box-shadow: 0 12px 35px rgba(162,89,198,0.35);
-        transform: translateY(-3px);
+        border-color: rgba(255,255,255,0.8);
+        box-shadow: 0 8px 25px rgba(255,255,255,0.2);
+        transform: translateY(-2px);
         outline: none;
+        background: #ffffff !important;
+        caret-color: #30cfd0;
     }
     .stTextInput>div>div>input::placeholder {
         color: #999;
         font-size: 1.2rem;
         font-weight: 400;
+    }
+    
+    /* Blinking cursor animation */
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+    }
+    
+    .stTextInput>div>div>input {
+        animation: none;
+    }
+    
+    .stTextInput>div>div>input:focus {
+        animation: none;
     }
     .stButton>button {
         background: linear-gradient(90deg, #a259c6 0%, #30cfd0 100%);
