@@ -33,7 +33,7 @@ st.markdown(
 # --- Chat Interface ---
 if 'messages' not in st.session_state:
     st.session_state['messages'] = [
-        {"role": "bot", "content": "Hello! 👋 Welcome to your AI Website Chatbot! I'm here to help you with any questions. Try asking me about websites, development, or anything else!"}
+        {"role": "bot", "content": "Welcome to your AI Website Chatbot! I'm here to help you with any questions. Try asking me about websites, development or anything else!"}
     ]
 
 for msg in st.session_state['messages']:
@@ -44,8 +44,25 @@ for msg in st.session_state['messages']:
 st.markdown("<hr>", unsafe_allow_html=True)
 
 with st.form(key="chat_form", clear_on_submit=True):
+    # Create a custom container with gradient background
+    st.markdown(
+        """
+        <div class="input-container-wrapper">
+            <div class="input-container-inner">
+        """,
+        unsafe_allow_html=True
+    )
+    
     user_input = st.text_input("", placeholder="Type your message...", key="user_message", label_visibility="collapsed")
     submit = st.form_submit_button("Send", use_container_width=True)
+    
+    st.markdown(
+        """
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 if submit and user_input.strip():
     st.session_state['messages'].append({"role": "user", "content": user_input})
@@ -102,6 +119,24 @@ st.markdown(
         padding: 0 !important;
         margin: 0 !important;
         min-height: 70px !important;
+    }
+    
+    /* New input container with gradient background */
+    .input-container-wrapper {
+        background: linear-gradient(135deg, #1a6fa5 0%, #5e3370 100%);
+        border-radius: 25px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: 2px solid rgba(48,207,208,0.3);
+    }
+    
+    .input-container-inner {
+        background: rgba(255,255,255,0.1);
+        border-radius: 20px;
+        padding: 15px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
     }
     .stTextInput>div {
         margin-bottom: 0 !important;
