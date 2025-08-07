@@ -67,19 +67,12 @@ st.markdown(
     <style>
     /* Make the very top Streamlit toolbar and header area match the app background */
     header[data-testid="stHeader"] {
-        background: linear-gradient(135deg, #30cfd0 0%, #a259c6 100%) !important;
+        background: linear-gradient(135deg, #1a6fa5 0%, #5e3370 100%) !important;
         box-shadow: none !important;
     }
     /* Remove Streamlit's default white padding above the header */
     section.main > div:first-child {
-        background: linear-gradient(135deg, #30cfd0 0%, #a259c6 100%) !important;
-        border-radius: 0 0 24px 24px;
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
-    /* Remove Streamlit's default white padding above the header */
-    section.main > div:first-child {
-        background: linear-gradient(135deg, #30cfd0 0%, #a259c6 100%) !important;
+        background: linear-gradient(135deg, #1a6fa5 0%, #5e3370 100%) !important;
         border-radius: 0 0 24px 24px;
         padding-top: 0 !important;
         margin-top: 0 !important;
