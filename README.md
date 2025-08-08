@@ -1,8 +1,8 @@
 # AI Website Chatbot 🤖✨
 
-A beautiful, professional AI-powered chatbot interface built with Streamlit and OpenAI. This intelligent chatbot can help with website development, programming questions, design advice, and much more!
+A beautiful, professional AI-powered chatbot interface built with Streamlit and OpenAI. This intelligent chatbot can help you with website development, programming questions, design advice and much more!
 
-## 🌟 Features
+## Features
 
 - **AI-Powered Responses**: Powered by OpenAI's GPT models 
 - **Beautiful UI**: Modern gradient design with glass morphism effects
