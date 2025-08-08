@@ -111,15 +111,6 @@ Try asking the AI about:
 - Visual feedback during AI processing
 - Mobile-responsive design
 
-## 🔄 Future Enhancements
-
-- [ ] Website scraping with LangChain
-- [ ] File upload capability
-- [ ] Chat history persistence
-- [ ] Multiple conversation threads
-- [ ] Voice input/output
-- [ ] Custom AI personas
-
 
 ## 📄 License
 
