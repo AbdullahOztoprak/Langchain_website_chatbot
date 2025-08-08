@@ -4,15 +4,15 @@ A beautiful, professional AI-powered chatbot interface built with Streamlit and 
 
 ## 🌟 Features
 
-- **🤖 AI-Powered Responses**: Powered by OpenAI's GPT models (GPT-3.5-turbo, GPT-4, GPT-4-turbo)
-- **🎨 Beautiful UI**: Modern gradient design with glass morphism effects
-- **⚙️ Customizable AI Settings**: Adjust model selection and creativity levels
-- **💬 Smart Chat Management**: Create new conversations with one click
-- **📱 Responsive Design**: Works perfectly on desktop and mobile
-- **🔒 Secure API Key Input**: Safe, encrypted API key handling
-- **✨ Smooth Animations**: Professional transitions and hover effects
+- **AI-Powered Responses**: Powered by OpenAI's GPT models 
+- **Beautiful UI**: Modern gradient design with glass morphism effects
+- **⚙Customizable AI Settings**: Adjust model selection and creativity levels
+- **Smart Chat Management**: Create new conversations with one click
+- **Responsive Design**: Works perfectly on desktop and mobile
+- **Secure API Key Input**: Safe, encrypted API key handling
+- **Smooth Animations**: Professional transitions and hover effects
 
-## 🚀 Quick Start
+## To Start
 
 ### 1. Installation
 
@@ -120,14 +120,7 @@ Try asking the AI about:
 - [ ] Voice input/output
 - [ ] Custom AI personas
 
-## 🤝 Contributing
-
-Feel free to contribute to this project! Open issues or submit pull requests.
 
 ## 📄 License
 
 This project is open source and available under the MIT License.
-
----
-
-**Made with ❤️ using Streamlit and OpenAI**
