@@ -12,16 +12,15 @@
 
 # AI Website Chatbot 🤖✨
 
-A beautiful, professional AI-powered chatbot interface built with Streamlit and OpenAI. This intelligent chatbot can help you with website development, programming questions, design advice and much more!
+A beautiful, professional AI-powered chatbot interface built with Streamlit. This intelligent chatbot can help you with website development, programming questions, design advice and much more!
 
 ## Features
 
-- **AI-Powered Responses**: Powered by OpenAI's GPT models 
+- **AI-Powered Responses**: Powered by local template-based generator (no API required)
+- **Internship Documentation Generator**: Instantly create professional internship reports locally
 - **Beautiful UI**: Modern gradient design with glass morphism effects
-- **⚙Customizable AI Settings**: Adjust model selection and creativity levels
 - **Smart Chat Management**: Create new conversations with one click
 - **Responsive Design**: Works perfectly on desktop and mobile
-- **Secure API Key Input**: Safe, encrypted API key handling
 - **Smooth Animations**: Professional transitions and hover effects
 
 ## ⚡️ Quick Installation & Run (Optimized for Low Resource PCs)
@@ -34,16 +33,10 @@ git clone https://github.com/your-username/Langchain_website_chatbot.git
 cd Langchain_website_chatbot
 
 # Install only essential dependencies
-python -m pip install streamlit openai python-dotenv
+python -m pip install streamlit python-dotenv
 ```
 
-### 2. Get OpenAI API Key
-
-1. Visit [OpenAI API Keys](https://platform.openai.com/api-keys)
-2. Create a new API key
-3. Copy your API key
-
-### 3. Run the Application
+### 2. Run the Application
 
 ```bash
 # Run the Streamlit app (no heavy backend)
@@ -51,23 +44,16 @@ streamlit run src/app.py
 # Alternatif: python -m streamlit run src/app.py
 ```
 
-### 4. Configure AI
+### 3. Usage
 
 1. Open your browser to `http://localhost:8501`
-2. Enter your OpenAI API key in the sidebar
-3. Start chatting!
+2. Use the chatbot or generate internship documentation (no API key or token required)
+3. Copy your generated documentation and use it in your internship report
 
 ## 🛠️ Configuration
 
 ### AI Models Available:
-- **GPT-3.5-turbo**: Fast and cost-effective
-- **GPT-4**: More capable, higher quality responses
-- **GPT-4-turbo**: Latest and most advanced model
-
-### Temperature Settings:
-- **0.0-0.3**: More focused and deterministic
-- **0.4-0.7**: Balanced creativity and accuracy
-- **0.8-2.0**: More creative and varied responses
+- **Local template-based generator**: No API or external model required
 
 ## 🗂️ Project Structure & Technical Details
 
@@ -97,8 +83,8 @@ Langchain_website_chatbot/
 
 ### Technologies Used
 - **Streamlit**: Interactive web UI for chatbot
-- **OpenAI API**: LLM-powered responses
-- **LangChain**: Advanced LLM orchestration and RAG
+- **Local Python logic**: Template-based documentation generator
+- **LangChain**: Advanced LLM orchestration and RAG (optional)
 - **FastAPI**: Optional backend for REST API
 - **ChromaDB**: Vector database for document retrieval
 - **Python-dotenv**: Secure environment variable management
@@ -137,7 +123,6 @@ Try asking the AI about:
 - One-click new chat functionality
 - Visual feedback during AI processing
 - Mobile-responsive design
-
 
 ## 📄 License
 
