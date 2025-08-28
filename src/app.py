@@ -127,7 +127,7 @@ with st.form(key="chat_form", clear_on_submit=True):
         unsafe_allow_html=True
     )
     
-    user_input = st.text_input("", placeholder="Type your message...", key="user_message", label_visibility="collapsed")
+    user_input = st.text_input("Mesajınız", placeholder="Type your message...", key="user_message", label_visibility="collapsed")
     submit = st.form_submit_button("Send", use_container_width=True)
     
     st.markdown(
