@@ -1,3 +1,15 @@
+# Industrial Automation AI Assistant 🚀🤖
+
+> This project was developed as a showcase for an industrial automation AI internship application. It demonstrates skills in software design, implementation, debugging, unit/module testing, test automation, and release tasks for industrial automation projects. The solution leverages state-of-the-art AI models (LLMs), LangChain, and modern web technologies (Streamlit, FastAPI) to create a professional chatbot focused on industrial/building automation topics.
+>
+> **Key responsibilities and qualifications addressed in this project:**
+> - Applied AI for industrial/building automation
+> - LLM-based solution development (LangChain, OpenAI)
+> - Frontend/backend development (Streamlit, FastAPI)
+> - Test automation and modular architecture
+> - Research and prototyping with real industrial documentation
+> - Passion for new technologies and tools
+
 # AI Website Chatbot 🤖✨
 
 A beautiful, professional AI-powered chatbot interface built with Streamlit and OpenAI. This intelligent chatbot can help you with website development, programming questions, design advice and much more!
@@ -12,7 +24,7 @@ A beautiful, professional AI-powered chatbot interface built with Streamlit and 
 - **Secure API Key Input**: Safe, encrypted API key handling
 - **Smooth Animations**: Professional transitions and hover effects
 
-## To Start
+## ⚡️ Quick Installation & Run (Optimized for Low Resource PCs)
 
 ### 1. Installation
 
@@ -21,11 +33,8 @@ A beautiful, professional AI-powered chatbot interface built with Streamlit and 
 git clone https://github.com/your-username/Langchain_website_chatbot.git
 cd Langchain_website_chatbot
 
-# Install Streamlit (if not installed)
-python -m pip install streamlit
-
-# Install other dependencies
-pip install -r requirements.txt
+# Install only essential dependencies
+python -m pip install streamlit openai python-dotenv
 ```
 
 ### 2. Get OpenAI API Key
@@ -37,22 +46,16 @@ pip install -r requirements.txt
 ### 3. Run the Application
 
 ```bash
-# Navigate to the src directory
-cd src
-
-# Run the Streamlit app
-streamlit run app.py
-
-# If you get 'streamlit not recognized', you can also run:
-python -m streamlit run app.py
+# Run the Streamlit app (no heavy backend)
+streamlit run src/app.py
+# Alternatif: python -m streamlit run src/app.py
 ```
 
 ### 4. Configure AI
 
 1. Open your browser to `http://localhost:8501`
 2. Enter your OpenAI API key in the sidebar
-3. Choose your preferred AI model and settings
-4. Start chatting!
+3. Start chatting!
 
 ## 🛠️ Configuration
 
@@ -66,36 +69,54 @@ python -m streamlit run app.py
 - **0.4-0.7**: Balanced creativity and accuracy
 - **0.8-2.0**: More creative and varied responses
 
-## 📁 Project Structure
+## 🗂️ Project Structure & Technical Details
 
 ```
 Langchain_website_chatbot/
 ├── src/
-│   └── app.py              # Main Streamlit application
-├── requirements.txt        # Python dependencies
-├── .env.template          # Environment variables template
-└── README.md              # This file
+│   ├── app.py                # Main Streamlit application (UI)
+│   ├── api/                  # FastAPI backend (optional, for advanced use)
+│   │   ├── __init__.py
+│   │   └── endpoints.py      # REST API endpoints for industrial automation
+│   ├── models/               # LLM and RAG modules
+│   │   ├── __init__.py
+│   │   ├── llm_utils.py      # LLM helper functions (LangChain, OpenAI)
+│   │   └── rag.py            # Retrieval Augmented Generation (RAG) implementation
+│   ├── data/
+│   │   └── industrial_docs/  # Sample industrial automation documents (txt/pdf)
+│   └── utils/
+│       ├── __init__.py
+│       └── helpers.py        # Utility functions (validation, formatting, etc.)
+├── tests/
+│   ├── __init__.py
+│   └── test_llm_utils.py     # Unit tests for LLM utilities
+├── requirements.txt          # Python dependencies
+├── .env.template             # Environment variables template
+└── README.md                 # Project documentation
 ```
 
-## 🔧 Environment Variables (Optional)
+### Technologies Used
+- **Streamlit**: Interactive web UI for chatbot
+- **OpenAI API**: LLM-powered responses
+- **LangChain**: Advanced LLM orchestration and RAG
+- **FastAPI**: Optional backend for REST API
+- **ChromaDB**: Vector database for document retrieval
+- **Python-dotenv**: Secure environment variable management
+- **PyPDF**: Industrial document processing
 
-Create a `.env` file based on `.env.template`:
-
-```env
-OPENAI_API_KEY=your_openai_api_key_here
-DEFAULT_MODEL=gpt-3.5-turbo
-DEFAULT_TEMPERATURE=0.7
-```
-
-## 💡 Example Questions
+## 💡 Example Questions (Industrial Automation Focus)
 
 Try asking the AI about:
-- "How do I optimize my website for SEO?"
-- "What's the best way to design a responsive layout?"
-- "Explain React hooks with examples"
-- "How to improve website loading speed?"
-- "Write a Python function to scrape websites"
-- "What are the latest web design trends?"
+- "How do I implement a PID control loop in a PLC?"
+- "What are the best practices for SCADA security?"
+- "How can I integrate OPC UA with my IoT platform?"
+- "What's the difference between BACnet and KNX protocols?"
+- "How to design an MES that integrates with SAP?"
+- "What sensors are typically used in predictive maintenance?"
+- "Explain the main components of a Building Automation System."
+- "How can I optimize energy usage in smart factories?"
+- "What are the latest trends in industrial automation?"
+- "How do I secure industrial networks against cyber threats?"
 
 ## 🎨 Features Showcase
 
@@ -121,3 +142,15 @@ Try asking the AI about:
 ## 📄 License
 
 This project is open source and available under the MIT License.
+
+## 🧪 Testing & Test Automation
+
+Unit and module tests are provided to ensure code reliability and maintainability. You can run all tests with:
+
+```bash
+python -m unittest discover tests
+```
+
+- All core logic (LLM helpers, utility functions) are covered by tests.
+- You can add more tests in the `tests/` directory for new features.
+- Test automation is recommended for professional development and CI/CD.
