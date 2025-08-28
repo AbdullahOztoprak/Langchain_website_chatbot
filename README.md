@@ -21,7 +21,10 @@ A beautiful, professional AI-powered chatbot interface built with Streamlit and 
 git clone https://github.com/your-username/Langchain_website_chatbot.git
 cd Langchain_website_chatbot
 
-# Install dependencies
+# Install Streamlit (if not installed)
+python -m pip install streamlit
+
+# Install other dependencies
 pip install -r requirements.txt
 ```
 
@@ -39,6 +42,9 @@ cd src
 
 # Run the Streamlit app
 streamlit run app.py
+
+# If you get 'streamlit not recognized', you can also run:
+python -m streamlit run app.py
 ```
 
 ### 4. Configure AI
