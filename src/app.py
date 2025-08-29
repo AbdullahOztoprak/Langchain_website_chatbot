@@ -100,17 +100,24 @@ def generate_llm_internship_doc(period, days, description, hf_token):
             device_map="auto" if torch.cuda.is_available() else None
         )
         
-        # Better prompt for text generation
-        prompt = f"Write a professional internship diary: During my {days}-day internship in {period}, I focused on {description}. My learning experience included"
+        # Improved prompt for passive voice, academic internship diary
+        prompt = (
+            f"Write a formal internship diary entry in English using passive voice. "
+            f"The internship lasted {days} days during {period} and focused on {description}. "
+            f"Use academic language and passive constructions like 'was learned', 'was observed', 'was developed'. "
+            f"Write detailed paragraphs about the learning experience, skills acquired, and knowledge gained. "
+            f"Do not mention specific names or companies. "
+            f"Start: During this {days}-day internship period in {period}, extensive knowledge was gained in"
+        )
         
-        # Generate text
+        # Generate text with better parameters for formal writing
         outputs = pipe(
             prompt,
-            max_new_tokens=150,
+            max_new_tokens=250,
             do_sample=True,
-            temperature=0.8,
+            temperature=0.6,  # Lower temperature for more formal text
             top_p=0.9,
-            repetition_penalty=1.2,
+            repetition_penalty=1.15,
             pad_token_id=pipe.tokenizer.eos_token_id
         )
         
@@ -120,7 +127,7 @@ def generate_llm_internship_doc(period, days, description, hf_token):
         if len(generated_text) > len(prompt):
             new_text = generated_text[len(prompt):].strip()
             
-            # Format as internship diary
+            # Format as formal internship diary with passive voice
             diary_entry = f"""INTERNSHIP DIARY
 
 Period: {period}
@@ -128,10 +135,13 @@ Duration: {days} days
 Focus Area: {description}
 
 LEARNING EXPERIENCE:
-During my {days}-day internship in {period}, I focused on {description}. My learning experience included {new_text}
+During this {days}-day internship period in {period}, extensive knowledge was gained in {new_text}
 
-PERSONAL REFLECTION:
-This internship provided valuable hands-on experience and enhanced my professional development.
+PROFESSIONAL DEVELOPMENT:
+Throughout the internship, various skills were developed and practical experience was acquired. Technical competencies were enhanced through hands-on activities, while professional communication skills were strengthened through daily interactions.
+
+REFLECTION:
+The internship experience provided valuable insights into industry practices. Theoretical knowledge was successfully applied to real-world situations, and a deeper understanding of professional environments was achieved.
 """
             return diary_entry
         else:
