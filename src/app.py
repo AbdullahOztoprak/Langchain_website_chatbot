@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 import requests
 import os
+import json
 from datetime import datetime
 
 # --- Page Config ---
@@ -82,6 +83,77 @@ if st.sidebar.button("🆕 New Chat", use_container_width=True, key="new_chat_bt
 
 st.sidebar.markdown("---")
 
+# --- Local LLM Function with Transformers ---
+def generate_llm_internship_doc(period, days, description, hf_token):
+    """Use local transformers library for text generation"""
+    try:
+        from transformers import pipeline
+        import torch
+        
+        st.info("Loading local LLM model... (first time may take a few minutes)")
+        
+        # Use a small, fast model that works well locally
+        pipe = pipeline(
+            "text-generation", 
+            model="distilgpt2",  # Small, fast model
+            torch_dtype=torch.float32,
+            device_map="auto" if torch.cuda.is_available() else None
+        )
+        
+        # Better prompt for text generation
+        prompt = f"Write a professional internship diary: During my {days}-day internship in {period}, I focused on {description}. My learning experience included"
+        
+        # Generate text
+        outputs = pipe(
+            prompt,
+            max_new_tokens=150,
+            do_sample=True,
+            temperature=0.8,
+            top_p=0.9,
+            repetition_penalty=1.2,
+            pad_token_id=pipe.tokenizer.eos_token_id
+        )
+        
+        generated_text = outputs[0]['generated_text']
+        
+        # Extract only the new generated part
+        if len(generated_text) > len(prompt):
+            new_text = generated_text[len(prompt):].strip()
+            
+            # Format as internship diary
+            diary_entry = f"""INTERNSHIP DIARY
+
+Period: {period}
+Duration: {days} days
+Focus Area: {description}
+
+LEARNING EXPERIENCE:
+During my {days}-day internship in {period}, I focused on {description}. My learning experience included {new_text}
+
+PERSONAL REFLECTION:
+This internship provided valuable hands-on experience and enhanced my professional development.
+"""
+            return diary_entry
+        else:
+            raise Exception("Model did not generate new content")
+            
+    except ImportError:
+        return "Error: Transformers library not installed. Please run: pip install transformers torch"
+    except Exception as e:
+        return f"""LOCAL LLM ERROR
+
+Error occurred: {str(e)}
+
+Input received:
+- Period: {period}
+- Duration: {days} days
+- Focus: {description}
+
+Try:
+1. Make sure you have enough RAM (4GB+ recommended)
+2. Run: pip install transformers torch
+3. Wait for model download on first use"""
+
 # --- Main Navigation Button ---
 if st.session_state['page'] == 'chatbot':
     if st.button("📄 Internship Documentation", use_container_width=False):
@@ -107,40 +179,15 @@ if st.session_state['page'] == 'internship':
             st.rerun()
 
     if generate_doc and period and days and description:
-        with st.spinner("📝 Generating your internship documentation..."):
+        with st.spinner("📝 Generating your internship documentation using LLM..."):
             try:
-                # Generate document using local template
-                internship_doc = f"""
-# INTERNSHIP DOCUMENTATION
-
-## Period: {period}
-## Duration: {days} days
-
-### Introduction
-I completed an internship during {period}, which lasted for {days} days. The internship provided valuable practical experience and professional development opportunities.
-
-### Main Tasks and Responsibilities
-During this internship, I was involved in the following activities:
-{description}
-
-### Skills Developed
-Through this internship, I developed several key skills:
-- Technical knowledge in the related field
-- Professional communication
-- Time management
-- Problem-solving
-- Teamwork and collaboration
-
-### Conclusion
-This internship has been extremely valuable for my professional development. I gained practical experience that complemented my academic knowledge and provided me with insights into real-world professional environments.
-
-### Acknowledgments
-I would like to thank my supervisors and colleagues for their guidance and support throughout this internship.
-                """
-                
-                st.markdown("### 📝 Generated Internship Documentation")
-                st.text_area("Your Internship Documentation (English)", value=internship_doc, height=350)
-                st.success("You can copy and use this documentation in your internship report!")
+                if not hf_token:
+                    st.error("Please enter your Hugging Face API token in the sidebar.")
+                else:
+                    internship_doc = generate_llm_internship_doc(period, days, description, hf_token)
+                    st.markdown("### 📝 Generated Internship Documentation")
+                    st.text_area("Your Internship Documentation (English)", value=internship_doc, height=350)
+                    st.success("You can copy and use this documentation in your internship report!")
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     elif generate_doc and not hf_token:
